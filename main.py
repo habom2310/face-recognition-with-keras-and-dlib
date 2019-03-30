@@ -158,7 +158,7 @@ plt.show()
 threshold = 0.6 
 
 # TEST
-test_paths = glob.glob("test_img/*.jpg")
+test_paths = glob.glob("test_image/*.jpg")
 for path in test_paths:
     test_image = cv2.imread(path)
     show_image = test_image.copy()
