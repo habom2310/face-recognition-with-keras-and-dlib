@@ -1,6 +1,8 @@
 # Face recognition with keras and dlib
 In this example, Keras is used to implement CNN model inspired by [OpenFace project](http://cmusatyalab.github.io/openface/). The model is a variant of the NN4 architecture and identified as nn4.small2 model in the OpenFace project. The model training aims to learn an embedding of an image that the L2 distance between all faces of the same identity is small and the distance between a pair of faces from different identities is large. By selecting suitable threshold, the model can recognize faces in own dataset.
 
+<img src="https://github.com/habom2310/face-recognition-with-keras-and-dlib/blob/master/result/res1.JPG" width="270"/> <img src="https://github.com/habom2310/face-recognition-with-keras-and-dlib/blob/master/result/res2.JPG" width="270"/> <img src = "https://github.com/habom2310/face-recognition-with-keras-and-dlib/blob/master/result/res3.JPG" width="270">
+
 # Pre-requisite
  ## Install needed packages
  - keras, dlib (can use the wheel file for windows)
@@ -25,6 +27,7 @@ In this example, Keras is used to implement CNN model inspired by [OpenFace proj
    - Load images for training.
    - Start training and save `train.embs` as the output (for instant use without training later).
    - Plot a graph showing the difference in the distance between match and unmatch training images. The value of threshold can be choose to separate match and unmatch. Modify the `threshold` in line 158 in `main.py`.
+   ![alt-text](https://github.com/habom2310/face-recognition-with-keras-and-dlib/blob/master/result/graph.JPG)
    - Test with images in the `test_image` folder. You can make this part a separate .py file, just need to load the `train.embs`.
    - Images for testing can have multiple faces. Faces from people not in the training data will be shown as "unknown".
    
