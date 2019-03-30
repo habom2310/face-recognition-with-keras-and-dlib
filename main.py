@@ -155,7 +155,7 @@ _,_,_=plt.hist(unmatch_distances,bins=100,fc=(1, 0, 0, 0.5))
 
 plt.show()
 
-threshold = 0.6 
+threshold = 0.9
 
 # TEST
 test_paths = glob.glob("test_image/*.jpg")
