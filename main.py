@@ -3,7 +3,6 @@ import os
 import matplotlib.pyplot as plt
 import cv2
 from imageio import imread
-from skimage.transform import resize
 from scipy.spatial import distance
 from keras.models import load_model
 import pandas as pd
@@ -40,6 +39,7 @@ for i,train_path in enumerate(train_paths):
         
 print(df_train.head())
 
+# PRE-PROCESSING
 def prewhiten(x):
     if x.ndim == 4:
         axis = (1, 2, 3)
@@ -67,14 +67,11 @@ def align_image(img):
     #print(bb)
     return alignment.align(96, img, bb,landmarkIndices=AlignDlib.OUTER_EYES_AND_NOSE)
   
-def load_and_align_images(filepaths, margin,image_size = 96):
-    
+def load_and_align_images(filepaths):
     aligned_images = []
     for filepath in filepaths:
         #print(filepath)
         img = cv2.imread(filepath)
-        #img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
-        #aligned = resize(img, (image_size, image_size), mode='reflect')
         aligned = align_image(img)
         aligned = (aligned / 255.).astype(np.float32)
         aligned = np.expand_dims(aligned, axis=0)
@@ -82,10 +79,10 @@ def load_and_align_images(filepaths, margin,image_size = 96):
             
     return np.array(aligned_images)
     
-def calc_embs(filepaths, margin=10, batch_size=64):
+def calc_embs(filepaths, batch_size=64):
     pd = []
     for start in tqdm(range(0, len(filepaths), batch_size)):
-        aligned_images = load_and_align_images(filepaths[start:start+batch_size], margin)
+        aligned_images = load_and_align_images(filepaths[start:start+batch_size])
         pd.append(nn4_small2.predict_on_batch(np.squeeze(aligned_images)))
     #embs = l2_normalize(np.concatenate(pd))
     embs = np.array(pd)
@@ -110,13 +107,11 @@ def calc_emb_test(faces):
         pd.append(nn4_small2.predict_on_batch(aligned_images))
     elif(len(faces)>1):
         pd.append(nn4_small2.predict_on_batch(np.squeeze(aligned_images)))
-      
     #embs = l2_normalize(np.concatenate(pd))
     embs = np.array(pd)
     return np.array(embs)
 
-# TRAIN    
-    
+# TRAINING
 label2idx = []
 
 for i in tqdm(range(len(train_paths))):
@@ -127,7 +122,7 @@ np.save("train_embs.npy", train_embs)
 
 train_embs = np.concatenate(train_embs)
 
-# ANALYSE
+# ANALYSING
 import matplotlib.pyplot as plt
 
 match_distances = []
@@ -192,7 +187,7 @@ for path in test_paths:
         for j in range(len(train_paths)):
             distances.append(np.min([distance.euclidean(test_embs[i].reshape(-1), train_embs[k].reshape(-1)) for k in label2idx[j]]))
             #for k in label2idx[j]:
-              #print(distance.euclidean(test_embs[i].reshape(-1), train_embs[k].reshape(-1)))
+                #print(distance.euclidean(test_embs[i].reshape(-1), train_embs[k].reshape(-1)))
         if np.min(distances)>threshold:
             people.append("unknown")
         else:
@@ -202,14 +197,13 @@ for path in test_paths:
     names = []
     title = ""
     for p in people:
-      if p == "unknown":
-          name = "unknown"
-      else:
-          name = df_train[(df_train['label']==p[0])].name.iloc[0]
-      names.append(name)
-      title = title + name + " "
-      
-      
+        if p == "unknown":
+            name = "unknown"
+        else:
+            name = df_train[(df_train['label']==p[0])].name.iloc[0]
+        names.append(name)
+        title = title + name + " "
+        
     for i,faceRect in enumerate(faceRects):
         x1 = faceRect.left()
         y1 = faceRect.top()
