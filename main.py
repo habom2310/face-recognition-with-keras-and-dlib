@@ -44,12 +44,12 @@ def l2_normalize(x, axis=-1, epsilon=1e-10):
     output = x / np.sqrt(np.maximum(np.sum(np.square(x), axis=axis, keepdims=True), epsilon))
     return output
 
-def align_image(img):
+def align_image(face):
     #print(img.shape)
-    (h,w,c) = img.shape
+    (h,w,c) = face.shape
     bb = dlib.rectangle(0, 0, w, h)
     #print(bb)
-    return alignment.align(96, img, bb,landmarkIndices=AlignDlib.OUTER_EYES_AND_NOSE)
+    return alignment.align(96, face, bb,landmarkIndices=AlignDlib.OUTER_EYES_AND_NOSE)
   
 def load_and_align_images(filepaths):
     aligned_images = []
