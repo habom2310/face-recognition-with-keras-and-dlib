@@ -44,7 +44,7 @@ def l2_normalize(x, axis=-1, epsilon=1e-10):
     output = x / np.sqrt(np.maximum(np.sum(np.square(x), axis=axis, keepdims=True), epsilon))
     return output
 
-def align_image(face):
+def align_face(face):
     #print(img.shape)
     (h,w,c) = face.shape
     bb = dlib.rectangle(0, 0, w, h)
@@ -56,7 +56,7 @@ def load_and_align_images(filepaths):
     for filepath in filepaths:
         #print(filepath)
         img = cv2.imread(filepath)
-        aligned = align_image(img)
+        aligned = align_face(img)
         aligned = (aligned / 255.).astype(np.float32)
         aligned = np.expand_dims(aligned, axis=0)
         aligned_images.append(aligned)
@@ -73,11 +73,11 @@ def calc_embs(filepaths, batch_size=64):
 
     return np.array(embs)
     
-def align_images(faces):
+def align_faces(faces):
     aligned_images = []
     for face in faces:
         #print(face.shape)
-        aligned = align_image(face)
+        aligned = align_face(face)
         aligned = (aligned / 255.).astype(np.float32)
         aligned = np.expand_dims(aligned, axis=0)
         aligned_images.append(aligned)
@@ -86,11 +86,11 @@ def align_images(faces):
 
 def calc_emb_test(faces):
     pd = []
-    aligned_images = align_images(faces)
+    aligned_faces = align_faces(faces)
     if(len(faces)==1):
-        pd.append(nn4_small2.predict_on_batch(aligned_images))
+        pd.append(nn4_small2.predict_on_batch(aligned_faces))
     elif(len(faces)>1):
-        pd.append(nn4_small2.predict_on_batch(np.squeeze(aligned_images)))
+        pd.append(nn4_small2.predict_on_batch(np.squeeze(aligned_faces)))
     #embs = l2_normalize(np.concatenate(pd))
     embs = np.array(pd)
     return np.array(embs)
