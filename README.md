@@ -6,7 +6,7 @@ In this example, Keras is used to implement CNN model inspired by [OpenFace proj
 # Pre-requisite
  ## Install needed packages
  - keras, dlib (can use the wheel file for windows)
- - scikit-learn, tqdm, pandas
+ - scikit-learn, tqdm, pandas, scipy
  ## Pre-trained models
  - Download `shape_predictor_68_face_landmarks.dat` from [here](https://github.com/AKSHAYUBHAT/TensorFace/blob/master/openface/models/dlib/shape_predictor_68_face_landmarks.dat) and put it in the project folder.
  
