@@ -26,7 +26,7 @@ In this example, Keras is used to implement CNN model inspired by [OpenFace proj
    - Initialize models.
    - Load images for training.
    - Start training and save `train.embs` as the output (for instant use without training later).
-   - Plot a graph showing the difference in the distance between match and unmatch training images. The value of threshold can be chosen to separate match and unmatch faces. Modify the `threshold` in line 153 in `main.py`.
+   - Plot a graph showing the difference in the distance between match and unmatch training images. The value of threshold can be chosen to separate match and unmatch faces. Modify the `threshold` in line 137 in `main.py`.
    ![alt-text](https://github.com/habom2310/face-recognition-with-keras-and-dlib/blob/master/result/graph.JPG)
    - Test with images in the `test_image` folder. You can make this part a separate .py file, just need to load the `train.embs`.
    - Images for testing can have multiple faces. Faces from people not in the training data will be shown as "unknown".
